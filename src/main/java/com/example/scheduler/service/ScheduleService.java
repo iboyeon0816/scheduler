@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ScheduleService {
     ScheduleResponseDto createSchedule(ScheduleCreateDto createDto);
-
     List<ScheduleResponseDto> findAllSchedules(LocalDate updatedAt, String authorName);
+    ScheduleResponseDto findScheduleById(Long scheduleId);
 }

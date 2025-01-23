@@ -1,6 +1,7 @@
 package com.example.scheduler.repository;
 
 import com.example.scheduler.entity.Schedule;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ScheduleRepositoryImpl implements ScheduleRepository {
@@ -61,6 +63,21 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                 .addValue("authorName", authorName);
 
         return jdbcTemplate.query(sql, params, scheduleRowMapper());
+    }
+
+    @Override
+    public Optional<Schedule> findById(Long scheduleId) {
+        String sql = "SELECT * FROM schedule WHERE id = :id";
+
+        try {
+            MapSqlParameterSource params = new MapSqlParameterSource()
+                    .addValue("id", scheduleId);
+
+            Schedule schedule = jdbcTemplate.queryForObject(sql, params, scheduleRowMapper());
+            return Optional.of(schedule);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     private RowMapper<Schedule> scheduleRowMapper() {
