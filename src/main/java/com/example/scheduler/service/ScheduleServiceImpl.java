@@ -1,6 +1,7 @@
 package com.example.scheduler.service;
 
 import com.example.scheduler.dto.ScheduleRequestDto.ScheduleCreateDto;
+import com.example.scheduler.dto.ScheduleRequestDto.ScheduleDeleteDto;
 import com.example.scheduler.dto.ScheduleResponseDto;
 import com.example.scheduler.entity.Schedule;
 import com.example.scheduler.repository.ScheduleRepository;
@@ -48,12 +49,26 @@ public class ScheduleServiceImpl implements ScheduleService{
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (!schedule.getPassword().equals(updateDto.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
+        validatePasswordMatching(schedule.getPassword(), updateDto.getPassword());
 
         schedule.update(updateDto);
         scheduleRepository.updateById(scheduleId, schedule);
         return new ScheduleResponseDto(schedule);
+    }
+
+    @Override
+    public void deleteScheduleById(Long scheduleId, ScheduleDeleteDto deleteDto) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        validatePasswordMatching(schedule.getPassword(), deleteDto.getPassword());
+
+        scheduleRepository.deleteById(scheduleId);
+    }
+
+    private static void validatePasswordMatching(String password, String inputPassword) {
+        if (!password.equals(inputPassword)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
     }
 }

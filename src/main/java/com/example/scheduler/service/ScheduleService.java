@@ -1,6 +1,7 @@
 package com.example.scheduler.service;
 
 import com.example.scheduler.dto.ScheduleRequestDto.ScheduleCreateDto;
+import com.example.scheduler.dto.ScheduleRequestDto.ScheduleDeleteDto;
 import com.example.scheduler.dto.ScheduleRequestDto.ScheduleUpdateDto;
 import com.example.scheduler.dto.ScheduleResponseDto;
 
@@ -12,4 +13,5 @@ public interface ScheduleService {
     List<ScheduleResponseDto> findAllSchedules(LocalDate updatedAt, String authorName);
     ScheduleResponseDto findScheduleById(Long scheduleId);
     ScheduleResponseDto updateScheduleById(Long scheduleId, ScheduleUpdateDto updateDto);
+    void deleteScheduleById(Long scheduleId, ScheduleDeleteDto deleteDto);
 }

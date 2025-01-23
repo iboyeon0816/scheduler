@@ -89,6 +89,15 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         jdbcTemplate.update(sql, params);
     }
 
+    @Override
+    public void deleteById(Long scheduleId) {
+        String sql = "DELETE FROM schedule WHERE id = :id";
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("id", scheduleId);
+        jdbcTemplate.update(sql, params);
+    }
+
     private RowMapper<Schedule> scheduleRowMapper() {
         return BeanPropertyRowMapper.newInstance(Schedule.class);
     }

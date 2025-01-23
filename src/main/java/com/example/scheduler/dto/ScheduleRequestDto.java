@@ -28,4 +28,11 @@ public class ScheduleRequestDto {
         @NotBlank
         private String task;
     }
+
+    @Getter
+    public static class ScheduleDeleteDto {
+        @NotBlank
+        @Size(max = 30)
+        private String password;
+    }
 }
