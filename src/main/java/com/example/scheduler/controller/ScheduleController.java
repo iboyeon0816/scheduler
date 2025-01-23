@@ -1,6 +1,7 @@
 package com.example.scheduler.controller;
 
 import com.example.scheduler.dto.ScheduleRequestDto.ScheduleCreateDto;
+import com.example.scheduler.dto.ScheduleRequestDto.ScheduleUpdateDto;
 import com.example.scheduler.dto.ScheduleResponseDto;
 import com.example.scheduler.service.ScheduleService;
 import jakarta.validation.Valid;
@@ -35,6 +36,13 @@ public class ScheduleController {
     @GetMapping("/{scheduleId}")
     public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long scheduleId) {
         ScheduleResponseDto resultDto = scheduleService.findScheduleById(scheduleId);
+        return ResponseEntity.ok(resultDto);
+    }
+
+    @PatchMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleResponseDto> updateScheduleById(@PathVariable Long scheduleId,
+                                                                  @Valid @RequestBody ScheduleUpdateDto updateDto) {
+        ScheduleResponseDto resultDto = scheduleService.updateScheduleById(scheduleId, updateDto);
         return ResponseEntity.ok(resultDto);
     }
 }

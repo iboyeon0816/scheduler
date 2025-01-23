@@ -7,10 +7,13 @@ import com.example.scheduler.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.example.scheduler.dto.ScheduleRequestDto.ScheduleUpdateDto;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +39,21 @@ public class ScheduleServiceImpl implements ScheduleService{
     public ScheduleResponseDto findScheduleById(Long scheduleId) {
         return scheduleRepository.findById(scheduleId)
                 .map(ScheduleResponseDto::new)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    @Transactional
+    public ScheduleResponseDto updateScheduleById(Long scheduleId, ScheduleUpdateDto updateDto) {
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (!schedule.getPassword().equals(updateDto.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        schedule.update(updateDto);
+        scheduleRepository.updateById(scheduleId, schedule);
+        return new ScheduleResponseDto(schedule);
     }
 }

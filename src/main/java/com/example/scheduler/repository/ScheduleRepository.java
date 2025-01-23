@@ -10,4 +10,5 @@ public interface ScheduleRepository {
     Schedule save(Schedule schedule);
     List<Schedule> findAll(LocalDate updatedAt, String authorName);
     Optional<Schedule> findById(Long scheduleId);
+    void updateById(Long scheduleId, Schedule schedule);
 }

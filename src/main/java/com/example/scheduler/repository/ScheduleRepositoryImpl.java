@@ -80,6 +80,16 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         }
     }
 
+    @Override
+    public void updateById(Long scheduleId, Schedule schedule) {
+        String sql = "UPDATE schedule " +
+                "SET author_name = :authorName, task = :task, updated_at = :updatedAt " +
+                "WHERE id = :id";
+
+        BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(schedule);
+        jdbcTemplate.update(sql, params);
+    }
+
     private RowMapper<Schedule> scheduleRowMapper() {
         return BeanPropertyRowMapper.newInstance(Schedule.class);
     }

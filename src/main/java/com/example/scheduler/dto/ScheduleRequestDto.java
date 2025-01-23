@@ -16,4 +16,16 @@ public class ScheduleRequestDto {
         @NotBlank
         private String task;
     }
+
+    @Getter
+    public static class ScheduleUpdateDto {
+        @NotBlank
+        @Size(max = 30)
+        private String authorName;
+        @NotBlank
+        @Size(max = 30)
+        private String password;
+        @NotBlank
+        private String task;
+    }
 }
