@@ -29,11 +29,10 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public Schedule save(Schedule schedule) {
+    public void save(Schedule schedule) {
         BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(schedule);
         Number id = jdbcInsert.executeAndReturnKey(params);
         schedule.setId(id.longValue());
-        return schedule;
     }
 
     @Override
