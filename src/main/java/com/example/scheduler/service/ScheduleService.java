@@ -1,9 +1,13 @@
 package com.example.scheduler.service;
 
 import com.example.scheduler.dto.ScheduleRequestDto.ScheduleCreateDto;
+import com.example.scheduler.dto.ScheduleResponseDto;
 
-import static com.example.scheduler.dto.ScheduleResponseDto.ScheduleCreateResultDto;
+import java.time.LocalDate;
+import java.util.List;
 
 public interface ScheduleService {
-    ScheduleCreateResultDto createSchedule(ScheduleCreateDto createDto);
+    ScheduleResponseDto createSchedule(ScheduleCreateDto createDto);
+
+    List<ScheduleResponseDto> findAllSchedules(LocalDate updatedAt, String authorName);
 }
