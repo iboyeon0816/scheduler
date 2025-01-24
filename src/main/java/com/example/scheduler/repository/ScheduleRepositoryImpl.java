@@ -37,25 +37,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     @Override
     public List<Schedule> findAll(LocalDate updatedAt, String authorName) {
-        String sql = "SELECT * FROM schedule ";
-
-        if (updatedAt != null || authorName != null) {
-            sql += "WHERE ";
-        }
-
-        if (updatedAt != null) {
-            sql += "DATE(updated_at) = :updatedAt ";
-        }
-
-        if (updatedAt != null && authorName != null) {
-            sql += "AND ";
-        }
-
-        if (authorName != null) {
-            sql += "author_name = :authorName ";
-        }
-
-        sql += "ORDER BY updated_at DESC";
+        String sql = createSelectQueryFilteringBy(updatedAt, authorName);
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("updatedAt", updatedAt)
@@ -79,6 +61,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         }
     }
 
+    // TODO: schedule -> dto 변경
     @Override
     public void updateById(Long scheduleId, Schedule schedule) {
         String sql = "UPDATE schedule " +
@@ -100,5 +83,37 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     private RowMapper<Schedule> scheduleRowMapper() {
         return BeanPropertyRowMapper.newInstance(Schedule.class);
+    }
+
+    private static String createSelectQueryFilteringBy(LocalDate updatedAt, String authorName) {
+        String sql = "SELECT * FROM schedule ";
+
+        if (isAnyNotNull(updatedAt, authorName)) {
+            sql += "WHERE ";
+        }
+
+        if (updatedAt != null) {
+            sql += "DATE(updated_at) = :updatedAt ";
+        }
+
+        if (areBothNotNull(updatedAt, authorName)) {
+            sql += "AND ";
+        }
+
+        if (authorName != null) {
+            sql += "author_name = :authorName ";
+        }
+
+        sql += "ORDER BY updated_at DESC";
+
+        return sql;
+    }
+
+    private static boolean isAnyNotNull(LocalDate updatedAt, String authorName) {
+        return updatedAt != null || authorName != null;
+    }
+
+    private static boolean areBothNotNull(LocalDate updatedAt, String authorName) {
+        return updatedAt != null && authorName != null;
     }
 }
