@@ -27,9 +27,4 @@ public class Schedule {
         this.createdAt = now;
         this.updatedAt = now;
     }
-
-    public void update(String task) {
-        this.task = task;
-        this.updatedAt = LocalDateTime.now().withNano(0);
-    }
 }

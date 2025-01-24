@@ -23,6 +23,13 @@ public class AuthorRepositoryImpl implements AuthorRepository{
     }
 
     @Override
+    public void save(Author author) {
+        BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(author);
+        Number id = jdbcInsert.executeAndReturnKey(params);
+        author.setId(id.longValue());
+    }
+
+    @Override
     public boolean existsById(Long authorId) {
         String sql = "SELECT CASE WHEN COUNT(*) > 0 THEN true " +
                 "ELSE false END " +
@@ -32,21 +39,5 @@ public class AuthorRepositoryImpl implements AuthorRepository{
                 .addValue("id", authorId);
 
         return jdbcTemplate.queryForObject(sql, params, Boolean.class);
-    }
-
-    @Override
-    public String findNameById(Long authorId) {
-        String sql = "SELECT name FROM author WHERE id = :id";
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("id", authorId);
-
-        return jdbcTemplate.queryForObject(sql, params, String.class);
-    }
-
-    @Override
-    public void save(Author author) {
-        BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(author);
-        Number id = jdbcInsert.executeAndReturnKey(params);
-        author.setId(id.longValue());
     }
 }

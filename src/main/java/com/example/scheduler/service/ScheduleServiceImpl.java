@@ -31,52 +31,40 @@ public class ScheduleServiceImpl implements ScheduleService{
         checkAuthorExists(createDto.getAuthorId());
         Schedule schedule = new Schedule(createDto);
         scheduleRepository.save(schedule);
-        String authorName = authorRepository.findNameById(schedule.getAuthorId());
-        return new ScheduleResponseDto(schedule, authorName);
+        return scheduleRepository.findDtoById(schedule.getId()).orElseThrow(IllegalStateException::new);
     }
 
     @Override
     public List<ScheduleResponseDto> findAllSchedules(LocalDate updatedAt, Long authorId, int page, int size) {
-        return scheduleRepository.findAll(updatedAt, authorId, page, size).stream()
-                .map(schedule -> new ScheduleResponseDto(
-                        schedule,
-                        authorRepository.findNameById(schedule.getAuthorId())
-                        ))
-                .toList();
+        return scheduleRepository.findAllDtos(updatedAt, authorId, page, size);
     }
 
     @Override
     public ScheduleResponseDto findScheduleById(Long scheduleId) {
-        return scheduleRepository.findById(scheduleId)
-                .map(schedule -> new ScheduleResponseDto(
-                        schedule,
-                        authorRepository.findNameById(schedule.getAuthorId())
-                ))
+        return scheduleRepository.findDtoById(scheduleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @Override
     @Transactional
     public ScheduleResponseDto updateScheduleById(Long scheduleId, ScheduleUpdateDto updateDto) {
-        Schedule schedule = scheduleRepository.findById(scheduleId)
+        String password = scheduleRepository.findPasswordById(scheduleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        checkPasswordMatch(schedule.getPassword(), updateDto.getPassword());
+        checkPasswordMatch(password, updateDto.getPassword());
 
-        schedule.update(updateDto.getTask());
-        ScheduleUpdateParam updateParam = new ScheduleUpdateParam(schedule.getTask(), schedule.getUpdatedAt());
+        ScheduleUpdateParam updateParam = new ScheduleUpdateParam(updateDto.getTask());
         scheduleRepository.updateById(scheduleId, updateParam);
-        String authorName = authorRepository.findNameById(schedule.getAuthorId());
-        return new ScheduleResponseDto(schedule, authorName);
+        return scheduleRepository.findDtoById(scheduleId).orElseThrow(IllegalStateException::new);
     }
 
     @Override
     @Transactional
     public void deleteScheduleById(Long scheduleId, ScheduleDeleteDto deleteDto) {
-        Schedule schedule = scheduleRepository.findById(scheduleId)
+        String password = scheduleRepository.findPasswordById(scheduleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        checkPasswordMatch(schedule.getPassword(), deleteDto.getPassword());
+        checkPasswordMatch(password, deleteDto.getPassword());
 
         scheduleRepository.deleteById(scheduleId);
     }

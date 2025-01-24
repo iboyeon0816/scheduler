@@ -1,5 +1,6 @@
 package com.example.scheduler.repository;
 
+import com.example.scheduler.controller.dto.ScheduleResponseDto;
 import com.example.scheduler.entity.Schedule;
 import com.example.scheduler.service.dto.ScheduleUpdateParam;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -37,33 +38,6 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public List<Schedule> findAll(LocalDate updatedAt, Long authorId, int page, int size) {
-        String sql = createSelectQueryFilteringBy(updatedAt, authorId);
-
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("updatedAt", updatedAt)
-                .addValue("authorId", authorId)
-                .addValue("limit", size)
-                .addValue("offset", (page - 1) * size);
-
-        return jdbcTemplate.query(sql, params, scheduleRowMapper());
-    }
-
-    @Override
-    public Optional<Schedule> findById(Long scheduleId) {
-        String sql = "SELECT * FROM schedule WHERE id = :id";
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("id", scheduleId);
-
-        try {
-            Schedule schedule = jdbcTemplate.queryForObject(sql, params, scheduleRowMapper());
-            return Optional.of(schedule);
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
-    }
-
-    @Override
     public void updateById(Long scheduleId, ScheduleUpdateParam updateParam) {
         String sql = "UPDATE schedule " +
                 "SET task = :task, updated_at = :updatedAt " +
@@ -86,19 +60,76 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         jdbcTemplate.update(sql, params);
     }
 
-    private RowMapper<Schedule> scheduleRowMapper() {
-        return BeanPropertyRowMapper.newInstance(Schedule.class);
+    @Override
+    public Optional<String> findPasswordById(Long scheduleId) {
+        String sql = "SELECT password FROM schedule WHERE id = :id";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("id", scheduleId);
+
+        try {
+            String password = jdbcTemplate.queryForObject(sql, params, String.class);
+            return Optional.of(password);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<ScheduleResponseDto> findDtoById(Long scheduleId) {
+        String sql = "SELECT s.id AS schedule_id, " +
+                "s.author_id, " +
+                "a.name AS author_name, " +
+                "s.task, " +
+                "s.created_at, " +
+                "s.updated_at " +
+                "FROM schedule s " +
+                "JOIN author a ON s.author_id = a.id " +
+                "WHERE s.id = :id";
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("id", scheduleId);
+
+        try {
+            ScheduleResponseDto scheduleDto = jdbcTemplate.queryForObject(sql, params, scheduleDtoRowMapper());
+            return Optional.of(scheduleDto);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<ScheduleResponseDto> findAllDtos(LocalDate updatedAt, Long authorId, int page, int size) {
+        String sql = createSelectQueryFilteringBy(updatedAt, authorId);
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("updatedAt", updatedAt)
+                .addValue("authorId", authorId)
+                .addValue("limit", size)
+                .addValue("offset", (page - 1) * size);
+
+        return jdbcTemplate.query(sql, params, scheduleDtoRowMapper());
+    }
+
+    private RowMapper<ScheduleResponseDto> scheduleDtoRowMapper() {
+        return BeanPropertyRowMapper.newInstance(ScheduleResponseDto.class);
     }
 
     private static String createSelectQueryFilteringBy(LocalDate updatedAt, Long authorId) {
-        String sql = "SELECT * FROM schedule ";
+        String sql = "SELECT s.id AS schedule_id, " +
+                "s.author_id, " +
+                "a.name AS author_name, " +
+                "s.task, " +
+                "s.created_at, " +
+                "s.updated_at " +
+                "FROM schedule s " +
+                "JOIN author a ON s.author_id = a.id ";
 
         if (isAnyNotNull(updatedAt, authorId)) {
             sql += "WHERE ";
         }
 
         if (updatedAt != null) {
-            sql += "DATE(updated_at) = :updatedAt ";
+            sql += "DATE(s.updated_at) = :updatedAt ";
         }
 
         if (areBothNotNull(updatedAt, authorId)) {
@@ -106,10 +137,10 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         }
 
         if (authorId != null) {
-            sql += "author_id = :authorId ";
+            sql += "s.author_id = :authorId ";
         }
 
-        sql += "ORDER BY updated_at DESC LIMIT :limit OFFSET :offset";
+        sql += "ORDER BY s.updated_at DESC LIMIT :limit OFFSET :offset";
 
         return sql;
     }
