@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ScheduleRepository {
     void save(Schedule schedule);
-    List<Schedule> findAll(LocalDate updatedAt, Long authorId);
+    List<Schedule> findAll(LocalDate updatedAt, Long authorId, int page, int size);
     Optional<Schedule> findById(Long scheduleId);
     void updateById(Long scheduleId, Schedule schedule);
     void deleteById(Long scheduleId);

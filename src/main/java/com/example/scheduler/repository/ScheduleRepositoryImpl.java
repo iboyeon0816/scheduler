@@ -36,12 +36,14 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public List<Schedule> findAll(LocalDate updatedAt, Long authorId) {
+    public List<Schedule> findAll(LocalDate updatedAt, Long authorId, int page, int size) {
         String sql = createSelectQueryFilteringBy(updatedAt, authorId);
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("updatedAt", updatedAt)
-                .addValue("authorId", authorId);
+                .addValue("authorId", authorId)
+                .addValue("limit", size)
+                .addValue("offset", (page - 1) * size);
 
         return jdbcTemplate.query(sql, params, scheduleRowMapper());
     }
@@ -104,7 +106,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             sql += "author_id = :authorId ";
         }
 
-        sql += "ORDER BY updated_at DESC";
+        sql += "ORDER BY updated_at DESC LIMIT :limit OFFSET :offset";
 
         return sql;
     }

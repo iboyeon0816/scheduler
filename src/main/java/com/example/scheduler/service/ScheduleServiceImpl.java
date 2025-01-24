@@ -35,8 +35,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllSchedules(LocalDate updatedAt, Long authorId) {
-        return scheduleRepository.findAll(updatedAt, authorId).stream()
+    public List<ScheduleResponseDto> findAllSchedules(LocalDate updatedAt, Long authorId, int page, int size) {
+        return scheduleRepository.findAll(updatedAt, authorId, page, size).stream()
                 .map(schedule -> new ScheduleResponseDto(
                         schedule,
                         authorRepository.findNameById(schedule.getAuthorId())
