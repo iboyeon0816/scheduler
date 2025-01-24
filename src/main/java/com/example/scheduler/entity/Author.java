@@ -19,10 +19,7 @@ public class Author {
     private LocalDateTime updatedAt;
 
     public Author(AuthorRequestDto requestDto) {
-        LocalDateTime now = LocalDateTime.now().withNano(0);
         this.name = requestDto.getName();
         this.email = requestDto.getEmail();
-        this.createdAt = now;
-        this.updatedAt = now;
     }
 }

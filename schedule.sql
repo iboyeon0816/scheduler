@@ -7,8 +7,8 @@ CREATE TABLE Author (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) NOT NULL,
     email VARCHAR(30) NOT NULL,
-    created_at timestamp NOT NULL,
-    updated_at timestamp NOT NULL
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE schedule (
@@ -16,6 +16,6 @@ CREATE TABLE schedule (
     author_id BIGINT NOT NULL REFERENCES Author (id),
     password VARCHAR(30) NOT NULL,
     task TEXT NOT NULL,
-    created_at timestamp NOT NULL,
-    updated_at timestamp NOT NULL
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

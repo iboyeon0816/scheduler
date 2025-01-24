@@ -6,7 +6,6 @@ import com.example.scheduler.controller.dto.ScheduleResponseDto;
 import com.example.scheduler.entity.Schedule;
 import com.example.scheduler.repository.AuthorRepository;
 import com.example.scheduler.repository.ScheduleRepository;
-import com.example.scheduler.service.dto.ScheduleUpdateParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -53,8 +52,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         checkPasswordMatch(password, updateDto.getPassword());
 
-        ScheduleUpdateParam updateParam = new ScheduleUpdateParam(updateDto.getTask());
-        scheduleRepository.updateById(scheduleId, updateParam);
+        scheduleRepository.updateById(scheduleId, updateDto.getTask());
         return scheduleRepository.findDtoById(scheduleId).orElseThrow(IllegalStateException::new);
     }
 

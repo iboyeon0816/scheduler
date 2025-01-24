@@ -20,11 +20,8 @@ public class Schedule {
     private LocalDateTime updatedAt;
 
     public Schedule(ScheduleCreateDto createDto) {
-        LocalDateTime now = LocalDateTime.now().withNano(0);
         this.authorId = createDto.getAuthorId();
         this.password = createDto.getPassword();
         this.task = createDto.getTask();
-        this.createdAt = now;
-        this.updatedAt = now;
     }
 }

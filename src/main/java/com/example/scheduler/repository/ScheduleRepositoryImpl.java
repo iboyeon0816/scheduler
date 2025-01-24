@@ -2,14 +2,13 @@ package com.example.scheduler.repository;
 
 import com.example.scheduler.controller.dto.ScheduleResponseDto;
 import com.example.scheduler.entity.Schedule;
-import com.example.scheduler.service.dto.ScheduleUpdateParam;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -21,31 +20,31 @@ import java.util.Optional;
 public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert jdbcInsert;
 
     public ScheduleRepositoryImpl(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        this.jdbcInsert = new SimpleJdbcInsert(dataSource)
-                .withTableName("schedule") // 데이터를 삽입할 테이블 지정
-                .usingGeneratedKeyColumns("id"); // 자동 증가 키 값을 반환받을 수 있게 지정
     }
 
     @Override
     public void save(Schedule schedule) {
-        BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(schedule);
-        Number id = jdbcInsert.executeAndReturnKey(params);
-        schedule.setId(id.longValue());
+        String sql = "INSERT INTO schedule (author_id, password, task) VALUES (:authorId, :password, :task)";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("authorId", schedule.getAuthorId())
+                .addValue("password", schedule.getPassword())
+                .addValue("task", schedule.getTask());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(sql, params, keyHolder);
+
+        long id = keyHolder.getKey().longValue();
+        schedule.setId(id);
     }
 
     @Override
-    public void updateById(Long scheduleId, ScheduleUpdateParam updateParam) {
-        String sql = "UPDATE schedule " +
-                "SET task = :task, updated_at = :updatedAt " +
-                "WHERE id = :id";
-
+    public void updateById(Long scheduleId, String task) {
+        String sql = "UPDATE schedule SET task = :task WHERE id = :id";
         MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("task", updateParam.getTask())
-                .addValue("updatedAt", updateParam.getUpdatedAt())
+                .addValue("task", task)
                 .addValue("id", scheduleId);
 
         jdbcTemplate.update(sql, params);

@@ -17,6 +17,6 @@ public class AuthorServiceImpl implements AuthorService{
     public AuthorResponseDto createAuthor(AuthorRequestDto authorRequestDto) {
         Author author = new Author(authorRequestDto);
         authorRepository.save(author);
-        return new AuthorResponseDto(author);
+        return authorRepository.findDtoById(author.getId()).orElseThrow(IllegalStateException::new);
     }
 }

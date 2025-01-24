@@ -1,23 +1,19 @@
 package com.example.scheduler.controller.dto;
 
-import com.example.scheduler.entity.Author;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class AuthorResponseDto {
-    private final Long id;
-    private final String name;
-    private final String email;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
-
-    public AuthorResponseDto(Author author) {
-        this.id = author.getId();
-        this.name = author.getName();
-        this.email = author.getEmail();
-        this.createdAt = author.getCreatedAt();
-        this.updatedAt = author.getUpdatedAt();
-    }
+    private Long id;
+    private String name;
+    private String email;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
