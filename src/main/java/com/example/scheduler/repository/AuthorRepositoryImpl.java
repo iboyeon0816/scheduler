@@ -26,4 +26,13 @@ public class AuthorRepositoryImpl implements AuthorRepository{
 
         return jdbcTemplate.queryForObject(sql, params, Boolean.class);
     }
+
+    @Override
+    public String findNameById(Long authorId) {
+        String sql = "SELECT name FROM author WHERE id = :id";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("id", authorId);
+
+        return jdbcTemplate.queryForObject(sql, params, String.class);
+    }
 }

@@ -30,20 +30,27 @@ public class ScheduleServiceImpl implements ScheduleService{
         checkAuthorExists(createDto.getAuthorId());
         Schedule schedule = new Schedule(createDto);
         scheduleRepository.save(schedule);
-        return new ScheduleResponseDto(schedule);
+        String authorName = authorRepository.findNameById(schedule.getAuthorId());
+        return new ScheduleResponseDto(schedule, authorName);
     }
 
     @Override
     public List<ScheduleResponseDto> findAllSchedules(LocalDate updatedAt, Long authorId) {
         return scheduleRepository.findAll(updatedAt, authorId).stream()
-                .map(ScheduleResponseDto::new)
+                .map(schedule -> new ScheduleResponseDto(
+                        schedule,
+                        authorRepository.findNameById(schedule.getAuthorId())
+                        ))
                 .toList();
     }
 
     @Override
     public ScheduleResponseDto findScheduleById(Long scheduleId) {
         return scheduleRepository.findById(scheduleId)
-                .map(ScheduleResponseDto::new)
+                .map(schedule -> new ScheduleResponseDto(
+                        schedule,
+                        authorRepository.findNameById(schedule.getAuthorId())
+                ))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -57,7 +64,8 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         schedule.update(updateDto);
         scheduleRepository.updateById(scheduleId, schedule);
-        return new ScheduleResponseDto(schedule);
+        String authorName = authorRepository.findNameById(schedule.getAuthorId());
+        return new ScheduleResponseDto(schedule, authorName);
     }
 
     @Override
