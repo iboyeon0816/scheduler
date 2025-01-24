@@ -14,6 +14,7 @@ public class ScheduleRequestDto {
         @Size(max = 30)
         private String password;
         @NotBlank
+        @Size(max = 200)
         private String task;
     }
 
@@ -26,6 +27,7 @@ public class ScheduleRequestDto {
         @Size(max = 30)
         private String password;
         @NotBlank
+        @Size(max = 200)
         private String task;
     }
 
