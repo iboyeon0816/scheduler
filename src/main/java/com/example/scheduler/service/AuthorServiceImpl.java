@@ -1,7 +1,7 @@
 package com.example.scheduler.service;
 
-import com.example.scheduler.dto.AuthorRequestDto;
-import com.example.scheduler.dto.AuthorResponseDto;
+import com.example.scheduler.controller.dto.AuthorRequestDto;
+import com.example.scheduler.controller.dto.AuthorResponseDto;
 import com.example.scheduler.entity.Author;
 import com.example.scheduler.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;

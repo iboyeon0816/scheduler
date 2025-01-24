@@ -1,6 +1,7 @@
 package com.example.scheduler.repository;
 
 import com.example.scheduler.entity.Schedule;
+import com.example.scheduler.service.dto.ScheduleUpdateParam;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -51,11 +52,10 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     @Override
     public Optional<Schedule> findById(Long scheduleId) {
         String sql = "SELECT * FROM schedule WHERE id = :id";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("id", scheduleId);
 
         try {
-            MapSqlParameterSource params = new MapSqlParameterSource()
-                    .addValue("id", scheduleId);
-
             Schedule schedule = jdbcTemplate.queryForObject(sql, params, scheduleRowMapper());
             return Optional.of(schedule);
         } catch (EmptyResultDataAccessException e) {
@@ -63,23 +63,26 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         }
     }
 
-    // TODO: schedule -> dto 변경
     @Override
-    public void updateById(Long scheduleId, Schedule schedule) {
+    public void updateById(Long scheduleId, ScheduleUpdateParam updateParam) {
         String sql = "UPDATE schedule " +
-                "SET author_name = :authorName, task = :task, updated_at = :updatedAt " +
+                "SET task = :task, updated_at = :updatedAt " +
                 "WHERE id = :id";
 
-        BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(schedule);
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("task", updateParam.getTask())
+                .addValue("updatedAt", updateParam.getUpdatedAt())
+                .addValue("id", scheduleId);
+
         jdbcTemplate.update(sql, params);
     }
 
     @Override
     public void deleteById(Long scheduleId) {
         String sql = "DELETE FROM schedule WHERE id = :id";
-
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", scheduleId);
+
         jdbcTemplate.update(sql, params);
     }
 

@@ -1,4 +1,4 @@
-package com.example.scheduler.dto;
+package com.example.scheduler.controller.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,9 +20,6 @@ public class ScheduleRequestDto {
 
     @Getter
     public static class ScheduleUpdateDto {
-        @NotBlank
-        @Size(max = 30)
-        private String authorName;
         @NotBlank
         @Size(max = 30)
         private String password;

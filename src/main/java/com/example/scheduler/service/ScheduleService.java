@@ -1,9 +1,9 @@
 package com.example.scheduler.service;
 
-import com.example.scheduler.dto.ScheduleRequestDto.ScheduleCreateDto;
-import com.example.scheduler.dto.ScheduleRequestDto.ScheduleDeleteDto;
-import com.example.scheduler.dto.ScheduleRequestDto.ScheduleUpdateDto;
-import com.example.scheduler.dto.ScheduleResponseDto;
+import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleCreateDto;
+import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleDeleteDto;
+import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleUpdateDto;
+import com.example.scheduler.controller.dto.ScheduleResponseDto;
 
 import java.time.LocalDate;
 import java.util.List;

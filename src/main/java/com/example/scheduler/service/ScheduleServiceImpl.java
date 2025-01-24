@@ -1,11 +1,12 @@
 package com.example.scheduler.service;
 
-import com.example.scheduler.dto.ScheduleRequestDto.ScheduleCreateDto;
-import com.example.scheduler.dto.ScheduleRequestDto.ScheduleDeleteDto;
-import com.example.scheduler.dto.ScheduleResponseDto;
+import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleCreateDto;
+import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleDeleteDto;
+import com.example.scheduler.controller.dto.ScheduleResponseDto;
 import com.example.scheduler.entity.Schedule;
 import com.example.scheduler.repository.AuthorRepository;
 import com.example.scheduler.repository.ScheduleRepository;
+import com.example.scheduler.service.dto.ScheduleUpdateParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.example.scheduler.dto.ScheduleRequestDto.ScheduleUpdateDto;
+import static com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleUpdateDto;
 
 @Service
 @RequiredArgsConstructor
@@ -62,8 +63,9 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         checkPasswordMatch(schedule.getPassword(), updateDto.getPassword());
 
-        schedule.update(updateDto);
-        scheduleRepository.updateById(scheduleId, schedule);
+        schedule.update(updateDto.getTask());
+        ScheduleUpdateParam updateParam = new ScheduleUpdateParam(schedule.getTask(), schedule.getUpdatedAt());
+        scheduleRepository.updateById(scheduleId, updateParam);
         String authorName = authorRepository.findNameById(schedule.getAuthorId());
         return new ScheduleResponseDto(schedule, authorName);
     }

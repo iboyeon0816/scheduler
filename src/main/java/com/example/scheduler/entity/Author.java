@@ -1,7 +1,6 @@
 package com.example.scheduler.entity;
 
-import com.example.scheduler.dto.AuthorRequestDto;
-import com.example.scheduler.dto.ScheduleRequestDto;
+import com.example.scheduler.controller.dto.AuthorRequestDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

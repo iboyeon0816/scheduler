@@ -1,7 +1,6 @@
 package com.example.scheduler.entity;
 
-import com.example.scheduler.dto.ScheduleRequestDto.ScheduleCreateDto;
-import com.example.scheduler.dto.ScheduleRequestDto.ScheduleUpdateDto;
+import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleCreateDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,9 +28,8 @@ public class Schedule {
         this.updatedAt = now;
     }
 
-    public void update(ScheduleUpdateDto updateDto) {
-//        this.authorName = updateDto.getAuthorName();
-        this.task = updateDto.getTask();
+    public void update(String task) {
+        this.task = task;
         this.updatedAt = LocalDateTime.now().withNano(0);
     }
 }
