@@ -63,14 +63,14 @@ Spring Framework를 활용해 간단한 일정 관리 애플리케이션을 개�
 설명: 다음 조건에 대한 검증을 수행한다.
 - `할 일`은 필수값이며, 최대 200자 이내로 제한한다.
 - `비밀번호`는 필수값이다.
-- 이메일은 이메일 형식을 따라야 한다.
+- `이메일`은 이메일 형식을 따라야 한다.
+
+<br>
+
+## ERD
+<img width="800" alt="erd" src="https://github.com/user-attachments/assets/3294bdf4-53cd-4b20-96c0-d16e17c3764a" />
 
 <br>
 
 ## API 명세서
 [API 명세서](https://documenter.getpostman.com/view/28485807/2sAYQdkAQf#759d8a7c-d6a8-4a25-9784-d93099e1dca3)
-
-<br> 
-
-## ERD
-[ERD](https://www.erdcloud.com/d/eiEEnREJrdEdLYD2D)
