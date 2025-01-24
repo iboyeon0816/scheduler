@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ScheduleService {
     ScheduleResponseDto createSchedule(ScheduleCreateDto createDto);
-    List<ScheduleResponseDto> findAllSchedules(LocalDate updatedAt, String authorName);
+    List<ScheduleResponseDto> findAllSchedules(LocalDate updatedAt, Long authorId);
     ScheduleResponseDto findScheduleById(Long scheduleId);
     ScheduleResponseDto updateScheduleById(Long scheduleId, ScheduleUpdateDto updateDto);
     void deleteScheduleById(Long scheduleId, ScheduleDeleteDto deleteDto);

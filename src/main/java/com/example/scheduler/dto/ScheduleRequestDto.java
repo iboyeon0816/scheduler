@@ -1,15 +1,15 @@
 package com.example.scheduler.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 public class ScheduleRequestDto {
     @Getter
     public static class ScheduleCreateDto {
-        @NotBlank
-        @Size(max = 30)
-        private String authorName;
+        @NotNull
+        private Long authorId;
         @NotBlank
         @Size(max = 30)
         private String password;

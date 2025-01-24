@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Schedule {
     private Long id;
-    private String authorName;
+    private Long authorId;
     private String password;
     private String task;
     private LocalDateTime createdAt;
@@ -22,7 +22,7 @@ public class Schedule {
 
     public Schedule(ScheduleCreateDto createDto) {
         LocalDateTime now = LocalDateTime.now().withNano(0);
-        this.authorName = createDto.getAuthorName();
+        this.authorId = createDto.getAuthorId();
         this.password = createDto.getPassword();
         this.task = createDto.getTask();
         this.createdAt = now;
@@ -30,7 +30,7 @@ public class Schedule {
     }
 
     public void update(ScheduleUpdateDto updateDto) {
-        this.authorName = updateDto.getAuthorName();
+//        this.authorName = updateDto.getAuthorName();
         this.task = updateDto.getTask();
         this.updatedAt = LocalDateTime.now().withNano(0);
     }

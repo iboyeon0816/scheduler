@@ -29,8 +29,8 @@ public class ScheduleController {
 
     @GetMapping
     public ResponseEntity<List<ScheduleResponseDto>> findAllSchedules(@RequestParam(required = false) LocalDate updatedAt,
-                                                                      @RequestParam(required = false) String authorName) {
-        List<ScheduleResponseDto> resultDtos = scheduleService.findAllSchedules(updatedAt, authorName);
+                                                                      @RequestParam(required = false) Long authorId) {
+        List<ScheduleResponseDto> resultDtos = scheduleService.findAllSchedules(updatedAt, authorId);
         return ResponseEntity.ok(resultDtos);
     }
 
@@ -49,7 +49,7 @@ public class ScheduleController {
 
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<Void> deleteScheduleById(@PathVariable Long scheduleId,
-                                                                  @Valid @RequestBody ScheduleDeleteDto deleteDto) {
+                                                   @Valid @RequestBody ScheduleDeleteDto deleteDto) {
         scheduleService.deleteScheduleById(scheduleId, deleteDto);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

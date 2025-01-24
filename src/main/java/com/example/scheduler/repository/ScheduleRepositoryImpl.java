@@ -36,12 +36,12 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public List<Schedule> findAll(LocalDate updatedAt, String authorName) {
-        String sql = createSelectQueryFilteringBy(updatedAt, authorName);
+    public List<Schedule> findAll(LocalDate updatedAt, Long authorId) {
+        String sql = createSelectQueryFilteringBy(updatedAt, authorId);
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("updatedAt", updatedAt)
-                .addValue("authorName", authorName);
+                .addValue("authorId", authorId);
 
         return jdbcTemplate.query(sql, params, scheduleRowMapper());
     }
@@ -85,10 +85,10 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return BeanPropertyRowMapper.newInstance(Schedule.class);
     }
 
-    private static String createSelectQueryFilteringBy(LocalDate updatedAt, String authorName) {
+    private static String createSelectQueryFilteringBy(LocalDate updatedAt, Long authorId) {
         String sql = "SELECT * FROM schedule ";
 
-        if (isAnyNotNull(updatedAt, authorName)) {
+        if (isAnyNotNull(updatedAt, authorId)) {
             sql += "WHERE ";
         }
 
@@ -96,12 +96,12 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             sql += "DATE(updated_at) = :updatedAt ";
         }
 
-        if (areBothNotNull(updatedAt, authorName)) {
+        if (areBothNotNull(updatedAt, authorId)) {
             sql += "AND ";
         }
 
-        if (authorName != null) {
-            sql += "author_name = :authorName ";
+        if (authorId != null) {
+            sql += "author_id = :authorId ";
         }
 
         sql += "ORDER BY updated_at DESC";
@@ -109,11 +109,11 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return sql;
     }
 
-    private static boolean isAnyNotNull(LocalDate updatedAt, String authorName) {
-        return updatedAt != null || authorName != null;
+    private static boolean isAnyNotNull(LocalDate updatedAt, Long authorId) {
+        return updatedAt != null || authorId != null;
     }
 
-    private static boolean areBothNotNull(LocalDate updatedAt, String authorName) {
-        return updatedAt != null && authorName != null;
+    private static boolean areBothNotNull(LocalDate updatedAt, Long authorId) {
+        return updatedAt != null && authorId != null;
     }
 }
