@@ -71,9 +71,10 @@ Spring Framework를 활용해 간단한 일정 관리 애플리케이션을 개�
 <img width="800" alt="erd" src="https://github.com/user-attachments/assets/3294bdf4-53cd-4b20-96c0-d16e17c3764a" />
 
 <br>
+<br>
 
 ## API 명세서
-### 1. Author
+### Author (작성자 관리 API)
 #### **POST** `/authors` 작성자 생성
 - **Description**: 새로운 작성자를 생성한다.
 - **Request Body**:
@@ -98,7 +99,7 @@ Spring Framework를 활용해 간단한 일정 관리 애플리케이션을 개�
 
 <br>
 
-### 2. Schedule
+### Schedule (일정 관리 API)
 #### **POST** `/schedules` 일정 생성
 - **Description**: 새로운 일정을 생성한다.
 
