@@ -3,7 +3,6 @@ package com.example.scheduler.service;
 import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleCreateDto;
 import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleDeleteDto;
 import com.example.scheduler.controller.dto.ScheduleResponseDto;
-import com.example.scheduler.entity.Schedule;
 import com.example.scheduler.repository.AuthorRepository;
 import com.example.scheduler.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +27,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleCreateDto createDto) {
         checkAuthorExists(createDto.getAuthorId());
-        Schedule schedule = new Schedule(createDto);
-        scheduleRepository.save(schedule);
-        return scheduleRepository.findDtoById(schedule.getId()).orElseThrow(IllegalStateException::new);
+        long scheduleId = scheduleRepository.save(createDto);
+        return scheduleRepository.findDtoById(scheduleId).orElseThrow(IllegalStateException::new);
     }
 
     @Override

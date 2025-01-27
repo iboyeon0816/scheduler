@@ -1,10 +1,11 @@
 package com.example.scheduler.repository;
 
+import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleCreateDto;
 import com.example.scheduler.controller.dto.ScheduleResponseDto;
-import com.example.scheduler.entity.Schedule;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -26,18 +27,14 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     }
 
     @Override
-    public void save(Schedule schedule) {
+    public long save(ScheduleCreateDto createDto) {
         String sql = "INSERT INTO schedule (author_id, password, task) VALUES (:authorId, :password, :task)";
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("authorId", schedule.getAuthorId())
-                .addValue("password", schedule.getPassword())
-                .addValue("task", schedule.getTask());
+        BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(createDto);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sql, params, keyHolder);
 
-        long id = keyHolder.getKey().longValue();
-        schedule.setId(id);
+        return keyHolder.getKey().longValue();
     }
 
     @Override

@@ -1,14 +1,14 @@
 package com.example.scheduler.repository;
 
+import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleCreateDto;
 import com.example.scheduler.controller.dto.ScheduleResponseDto;
-import com.example.scheduler.entity.Schedule;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface ScheduleRepository {
-    void save(Schedule schedule);
+    long save(ScheduleCreateDto createDto);
     void updateById(Long scheduleId, String task);
     void deleteById(Long scheduleId);
     Optional<String> findPasswordById(Long scheduleId);

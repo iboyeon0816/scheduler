@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleController {
 
-    private static final String DEFAULT_SIZE = "4";
+    private static final int DEFAULT_SIZE = 4;
 
     private final ScheduleService scheduleService;
 
@@ -34,7 +34,7 @@ public class ScheduleController {
     public ResponseEntity<List<ScheduleResponseDto>> findAllSchedules(@RequestParam(required = false) LocalDate updatedAt,
                                                                       @RequestParam(required = false) Long authorId,
                                                                       @RequestParam(defaultValue = "1") @Min(1) int page,
-                                                                      @RequestParam(defaultValue = DEFAULT_SIZE) @Min(1) int size) {
+                                                                      @RequestParam(defaultValue = "" + DEFAULT_SIZE) @Min(1) int size) {
         List<ScheduleResponseDto> resultDtos = scheduleService.findAllSchedules(updatedAt, authorId, page, size);
         return ResponseEntity.ok(resultDtos);
     }
