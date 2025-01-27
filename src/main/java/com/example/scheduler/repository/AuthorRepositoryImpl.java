@@ -1,10 +1,11 @@
 package com.example.scheduler.repository;
 
-import com.example.scheduler.controller.dto.AuthorResponseDto;
+import com.example.scheduler.controller.dto.AuthorRequestDto;
 import com.example.scheduler.entity.Author;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -24,17 +25,14 @@ public class AuthorRepositoryImpl implements AuthorRepository{
     }
 
     @Override
-    public void save(Author author) {
+    public long save(AuthorRequestDto authorRequestDto) {
         String sql = "INSERT INTO author (name, email) VALUES (:name, :email)";
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("name", author.getName())
-                .addValue("email", author.getEmail());
+        BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(authorRequestDto);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sql, params, keyHolder);
 
-        long id = keyHolder.getKey().longValue();
-        author.setId(id);
+        return keyHolder.getKey().longValue();
     }
 
     @Override
@@ -50,20 +48,20 @@ public class AuthorRepositoryImpl implements AuthorRepository{
     }
 
     @Override
-    public Optional<AuthorResponseDto> findDtoById(Long authorId) {
+    public Optional<Author> findById(Long authorId) {
         String sql = "SELECT * FROM author WHERE id = :id";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", authorId);
 
         try {
-            AuthorResponseDto authorDto = jdbcTemplate.queryForObject(sql, params, authorDtoMapper());
-            return Optional.of(authorDto);
+            Author author = jdbcTemplate.queryForObject(sql, params, authorRowMapper());
+            return Optional.of(author);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
 
-    private RowMapper<AuthorResponseDto> authorDtoMapper() {
-        return BeanPropertyRowMapper.newInstance(AuthorResponseDto.class);
+    private RowMapper<Author> authorRowMapper() {
+        return BeanPropertyRowMapper.newInstance(Author.class);
     }
 }
