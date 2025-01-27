@@ -14,6 +14,49 @@ Spring Framework를 활용해 간단한 일정 관리 애플리케이션을 개�
 
 <br>
 
+## 프로젝트 구조
+```
+src/
+├── main/
+│   └── java/com/example/scheduler/
+│   │   ├── controller/
+│   │   ├── dto/
+│   │   ├── entity/
+│   │   ├── exception/
+│   │   ├── repository/
+│   │   ├── service/
+│   │   └── SchedulerApplication.java
+│   └── resources/
+│   │   └── application.properties
+``` 
+
+<br>
+
+## 프로젝트 실행 방법
+### 1. GitHub에서 프로젝트 클론
+터미널에서 아래 명령어를 통해 프로젝트를 클론한다.
+```bash
+git clone https://github.com/iboyeon0816/scheduler.git
+cd scheduler
+```
+
+### 2. 데이터베이스 연결 정보 설정
+`src/main/resources` 디렉토리에 `application-SECRET.properties` 파일을 생성하고, 아래 내용을 추가한다.
+```properties
+spring.datasource.password=your_db_password
+```
+
+### 3. 데이터베이스 생성
+MySQL에서 `schedule.sql` 내 스크립트를 실행하여 필요한 데이터베이스 및 테이블을 생성한다.
+- `schedule.sql` 파일은 프로젝트 루트에 위치한다.
+
+### 4. 애플리케이션 실행
+IntelliJ에서 프로젝트를 열고, `SchedulerApplication.java` 파일을 찾아 메인 메소드를 실행한다.
+- 우클릭 > Run 'SchedulerApplication'을 클릭하여 애플리케이션을 실행한다.
+- 애플리케이션이 실행되면 `http://localhost:8080`에서 API를 확인할 수 있다.
+
+<br>
+
 ## 필수 과제 기능 요구사항
 ### 1. 일정 작성하기
 설명: 사용자는 새로운 일정을 추가할 수 있어야 한다.
@@ -93,7 +136,7 @@ Spring Framework를 활용해 간단한 일정 관리 애플리케이션을 개�
 
 <br>
 
-### Author 작성자 관리 API
+### 작성자 관리 API
 #### **POST** `/authors` 작성자 생성
 - **Description**: 새로운 작성자를 생성한다.
 - **Request Body**:
