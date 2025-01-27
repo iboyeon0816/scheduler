@@ -68,7 +68,7 @@ Spring Framework를 활용해 간단한 일정 관리 애플리케이션을 개�
 <br>
 
 ## ERD
-<img width="800" alt="erd" src="https://github.com/user-attachments/assets/3294bdf4-53cd-4b20-96c0-d16e17c3764a" />
+<img width="700" alt="ERD" src="https://github.com/user-attachments/assets/4786c3ce-f674-4123-b702-18082213dda4" />
 
 <br>
 <br>
