@@ -1,9 +1,9 @@
 package com.example.scheduler.controller;
 
-import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleCreateDto;
-import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleDeleteDto;
-import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleUpdateDto;
-import com.example.scheduler.controller.dto.ScheduleResponseDto;
+import com.example.scheduler.dto.ScheduleRequestDto.ScheduleCreateDto;
+import com.example.scheduler.dto.ScheduleRequestDto.ScheduleDeleteDto;
+import com.example.scheduler.dto.ScheduleRequestDto.ScheduleUpdateDto;
+import com.example.scheduler.dto.ScheduleResponseDto;
 import com.example.scheduler.service.ScheduleService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;

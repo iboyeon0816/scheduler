@@ -1,7 +1,7 @@
 package com.example.scheduler.repository;
 
-import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleCreateDto;
-import com.example.scheduler.controller.dto.ScheduleResponseDto;
+import com.example.scheduler.dto.ScheduleRequestDto.ScheduleCreateDto;
+import com.example.scheduler.dto.ScheduleResponseDto;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;

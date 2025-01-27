@@ -1,6 +1,6 @@
 package com.example.scheduler.repository;
 
-import com.example.scheduler.controller.dto.AuthorRequestDto;
+import com.example.scheduler.dto.AuthorRequestDto;
 import com.example.scheduler.entity.Author;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;

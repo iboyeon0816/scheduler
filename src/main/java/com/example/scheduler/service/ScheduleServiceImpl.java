@@ -1,8 +1,8 @@
 package com.example.scheduler.service;
 
-import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleCreateDto;
-import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleDeleteDto;
-import com.example.scheduler.controller.dto.ScheduleResponseDto;
+import com.example.scheduler.dto.ScheduleRequestDto.ScheduleCreateDto;
+import com.example.scheduler.dto.ScheduleRequestDto.ScheduleDeleteDto;
+import com.example.scheduler.dto.ScheduleResponseDto;
 import com.example.scheduler.exception.ex.UnAuthenticatedException;
 import com.example.scheduler.exception.ex.NotFoundException;
 import com.example.scheduler.repository.AuthorRepository;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleUpdateDto;
+import static com.example.scheduler.dto.ScheduleRequestDto.ScheduleUpdateDto;
 
 @Service
 @RequiredArgsConstructor

@@ -1,7 +1,7 @@
 package com.example.scheduler.repository;
 
-import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleCreateDto;
-import com.example.scheduler.controller.dto.ScheduleResponseDto;
+import com.example.scheduler.dto.ScheduleRequestDto.ScheduleCreateDto;
+import com.example.scheduler.dto.ScheduleResponseDto;
 
 import java.time.LocalDate;
 import java.util.List;
