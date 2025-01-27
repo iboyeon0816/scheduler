@@ -3,13 +3,13 @@ package com.example.scheduler.service;
 import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleCreateDto;
 import com.example.scheduler.controller.dto.ScheduleRequestDto.ScheduleDeleteDto;
 import com.example.scheduler.controller.dto.ScheduleResponseDto;
+import com.example.scheduler.exception.ex.UnAuthenticatedException;
+import com.example.scheduler.exception.ex.NotFoundException;
 import com.example.scheduler.repository.AuthorRepository;
 import com.example.scheduler.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -39,14 +39,14 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Override
     public ScheduleResponseDto findScheduleById(Long scheduleId) {
         return scheduleRepository.findDtoById(scheduleId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException("Schedule with ID " + scheduleId + " not found"));
     }
 
     @Override
     @Transactional
     public ScheduleResponseDto updateScheduleById(Long scheduleId, ScheduleUpdateDto updateDto) {
         String password = scheduleRepository.findPasswordById(scheduleId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException("Schedule with ID " + scheduleId + " not found"));
 
         checkPasswordMatch(password, updateDto.getPassword());
 
@@ -58,7 +58,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Transactional
     public void deleteScheduleById(Long scheduleId, ScheduleDeleteDto deleteDto) {
         String password = scheduleRepository.findPasswordById(scheduleId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException("Schedule with ID " + scheduleId + " not found"));
 
         checkPasswordMatch(password, deleteDto.getPassword());
 
@@ -67,13 +67,13 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     private void checkAuthorExists(Long authorId) {
         if (!authorRepository.existsById(authorId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Author with ID " + authorId + " not found");
         }
     }
 
     private static void checkPasswordMatch(String password, String inputPassword) {
         if (!password.equals(inputPassword)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new UnAuthenticatedException("The password for this schedule is incorrect");
         }
     }
 }
