@@ -74,7 +74,26 @@ Spring Framework를 활용해 간단한 일정 관리 애플리케이션을 개�
 <br>
 
 ## API 명세서
-### Author (작성자 관리 API)
+### 에러 응답 형식
+- **Description**: 에러 응답은 다음 형식으로 반환된다.
+- **Response Format**:
+  ```json
+  {
+    "status": 400,
+    "message": "Validation Failed",
+    "result": {
+      "fieldName": "Error Message",
+      "anotherField": "Another Error Message"
+    }
+  }
+  ```
+  - `status`: HTTP 상태 코드 (예: 400, 404)
+  - `message`: 에러에 대한 간략한 설명
+  - `result`: 추가 정보가 필요한 경우에 포함되며, 에러 필드와 메시지가 키-값 형태로 반환됨. 값이 없는 경우 생략
+
+<br>
+
+### Author 작성자 관리 API
 #### **POST** `/authors` 작성자 생성
 - **Description**: 새로운 작성자를 생성한다.
 - **Request Body**:
@@ -99,7 +118,7 @@ Spring Framework를 활용해 간단한 일정 관리 애플리케이션을 개�
 
 <br>
 
-### Schedule (일정 관리 API)
+### 일정 관리 API
 #### **POST** `/schedules` 일정 생성
 - **Description**: 새로운 일정을 생성한다.
 
