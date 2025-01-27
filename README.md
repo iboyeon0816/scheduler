@@ -73,4 +73,151 @@ Spring Framework를 활용해 간단한 일정 관리 애플리케이션을 개�
 <br>
 
 ## API 명세서
-[API 명세서](https://documenter.getpostman.com/view/28485807/2sAYQdkAQf#759d8a7c-d6a8-4a25-9784-d93099e1dca3)
+### 1. Author
+#### **POST** `/authors` 작성자 생성
+- **Description**: 새로운 작성자를 생성한다.
+- **Request Body**:
+  ```json
+  {
+    "name": "temp",
+    "email": "temp@gmail.com"
+  }
+  ```
+- **Response**:
+  - **Status**: `201 Created`
+  - **Body**:
+  ```json
+  {
+    "authorId": 1,
+    "name": "temp",
+    "email": "temp@gmail.com",
+    "createdAt": "2025-01-27T10:41:19",
+    "updatedAt": "2025-01-27T10:41:19"
+  }
+  ```
+
+<br>
+
+### 2. Schedule
+#### **POST** `/schedules` 일정 생성
+- **Description**: 새로운 일정을 생성한다.
+
+- **Request Body**:
+  ```json
+  {
+    "authorId": 1,
+    "password": "pwd1234",
+    "task": "해야할 일"
+  }
+  ```
+
+- **Response**:
+  - **Status**: `201 Created`
+  - **Body**:
+  ```json
+  {
+    "scheduleId": 1,
+    "authorId": 1,
+    "authorName": "temp"
+    "task": "해야할 일"
+    "createdAt": "2025-01-27T10:41:19",
+    "updatedAt": "2025-01-27T10:41:19"
+  }
+  ```
+
+#### **GET** `/schedules` 일정 전체 조회
+- **Description**: 일정 목록을 조회한다. 일정은 선택적으로 `updatedAt`, `authorId` 필터로 조회할 수 있으며, 페이지네이션 기능을 지원한다.
+
+- **Request Parameters**:
+  - `updatedAt` (optional): 특정 날짜에 업데이트된 일정을 필터링한다.
+  - `authorId` (optional): 특정 작성자의 일정을 필터링한다.
+  - `page` (optional): 조회할 페이지 번호 (1 이상, 기본값:1)
+  - `size` (optional): 페이지당 조회할 일정의 개수 (1 이상, 기본값:4)
+ 
+- **Response**:
+  - **Status**: `200 OK`
+  - **Body**:
+  ```json
+  [
+    {
+      "scheduleId": 1,
+      "authorId": 1,
+      "authorName": "temp"
+      "task": "해야할 일"
+      "createdAt": "2025-01-27T10:41:19",
+      "updatedAt": "2025-01-27T10:41:19"
+    },
+    {
+        "scheduleId": 2,
+        "authorId": 1,
+        "authorName": "temp"
+        "task": "해야할 일2"
+        "createdAt": "2025-01-27T10:41:19",
+        "updatedAt": "2025-01-27T10:41:19"
+      }
+  ]
+  ```
+
+#### **GET** `/schedules/{scheduleId}` 일정 단 건 조회
+- **Description**: 특정 ID를 가진 일정을 조회한다.
+
+- **Path Variable**:
+  - `scheduleId` (required): 조회할 일정의 ID
+    
+- **Response**:
+  - **Status**: `200 OK`
+  - **Body**:
+  ```json
+  {
+    "scheduleId": 1,
+    "authorId": 1,
+    "authorName": "temp"
+    "task": "해야할 일"
+    "createdAt": "2025-01-27T10:41:19",
+    "updatedAt": "2025-01-27T10:41:19"
+  }
+  ```
+
+#### **PATCH** `/schedules/{scheduleId}` 일정 수정
+- **Description**: 특정 ID를 가진 일정을 수정한다.
+
+- **Path Variable**:
+  - `scheduleId` (required): 수정할 일정의 ID
+
+- **Request Body**:
+  ```json
+  {
+    "password": "pwd1234",
+    "task": "수정된 할 일"
+  }
+  ```
+  
+- **Response**:
+  - **Status**: `200 OK`
+  - **Body**:
+  ```json
+  {
+    "scheduleId": 1,
+    "authorId": 1,
+    "authorName": "temp"
+    "task": "수정된 할 일"
+    "createdAt": "2025-01-27T10:41:19",
+    "updatedAt": "2025-01-28T10:41:19"
+  }
+  ```
+
+#### **DELETE** `/schedules/{scheduleId}` 일정 삭제
+- **Description**: 특정 ID를 가진 일정을 삭제한다.
+
+- **Path Variable**:
+  - `scheduleId` (required): 삭제할 일정의 ID
+
+- **Request Body**:
+  ```json
+  {
+    "password": "pwd1234"
+  }
+  ```
+  
+- **Response**:
+  - **Status**: `204 No Content`
