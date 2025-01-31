@@ -3,6 +3,7 @@ package com.example.scheduler.exception;
 import com.example.scheduler.exception.ex.GeneralException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Map;
@@ -67,6 +69,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         String message = "The HTTP method " + ex.getMethod() + " is not supported for this endpoint";
         CustomErrorResponse<Void> body = CustomErrorResponse.of(status.value(), message, null);
+        return new ResponseEntity<>(body, headers, status);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        Map<String, String> errors = ex.getParameterValidationResults().stream()
+                .collect(Collectors.toMap(
+                        result -> result.getMethodParameter().getParameterName(),
+                        result -> result.getResolvableErrors().stream()
+                                .map(MessageSourceResolvable::getDefaultMessage)
+                                .collect(Collectors.joining(", "))
+                ));
+
+        CustomErrorResponse<Map<String, String>> body = CustomErrorResponse.of(status.value(), "Validation Failed", errors);
         return new ResponseEntity<>(body, headers, status);
     }
 }
