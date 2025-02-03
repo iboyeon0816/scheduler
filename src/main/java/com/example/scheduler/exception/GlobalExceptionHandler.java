@@ -43,7 +43,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .collect(Collectors.toMap(
                         violation -> {
                             String[] pathParts = violation.getPropertyPath().toString().split("\\.");
-                            return pathParts[pathParts.length - 1];
+                            return pathParts[pathParts.length - 1]; // 필드명 추출
                         },
                         ConstraintViolation::getMessage
                 ));
@@ -58,7 +58,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .collect(Collectors.toMap(
                         FieldError::getField,
                         DefaultMessageSourceResolvable::getDefaultMessage,
-                        (oldMsg, newMsg) -> oldMsg + ", " + newMsg
+                        (oldMsg, newMsg) -> oldMsg + ", " + newMsg // 중복 필드 오류 메시지 처리
                 ));
 
         CustomErrorResponse<Map<String, String>> body = CustomErrorResponse.of(status.value(), "Validation Failed", errors);

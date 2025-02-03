@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleController {
 
-    private static final int DEFAULT_SIZE = 4;
+    private static final int DEFAULT_SIZE = 4; // 기본 페이지 크기
 
     private final ScheduleService scheduleService;
 
@@ -30,6 +30,18 @@ public class ScheduleController {
         return new ResponseEntity<>(resultDto, HttpStatus.CREATED);
     }
 
+    /**
+     * 일정 목록을 조회하는 API
+     *
+     * `updatedAt`과 `authorId`로 필터링 기능 제공
+     * `page`와 `size`로 페이징 기능 제공
+     *
+     * @param updatedAt 해당 날짜에 수정된 일정만 조회 (선택적)
+     * @param authorId 해당 작성자의 일정만 조회 (선택적)
+     * @param page 조회할 페이지 번호 (기본값: 1)
+     * @param size 페이지 당 일정 수 (기본값: DEFAULT_SIZE)
+     * @return 일정 목록 응답
+     */
     @GetMapping
     public ResponseEntity<List<ScheduleResponseDto>> findAllSchedules(@RequestParam(required = false) LocalDate updatedAt,
                                                                       @RequestParam(required = false) Long authorId,
